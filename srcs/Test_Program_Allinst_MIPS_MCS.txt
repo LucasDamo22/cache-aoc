@@ -1,0 +1,91 @@
+Text Segment
+0x00400000  0x3c0800f3  lui $8,0x000000f3     17   main:	lui	$t0,0xf3	#
+0x00400004  0x35080023  ori $8,$8,0x00000023  18   	ori	$t0,$t0,0x23		# $t0<= 0x00f30023
+0x00400008  0x3c090052  lui $9,0x00000052     19   	lui	$t1,0x52			#
+0x0040000c  0x352900e2  ori $9,$9,0x000000e2  20   	ori	$t1,$t1,0xe2		# $t1<= 0x005200e2
+0x00400010  0x3c0a0000  lui $10,0x00000000    21   	lui	$t2,0x00			#
+0x00400014  0x354a008f  ori $10,$10,0x0000008f22   	ori	$t2,$t2,0x8f		# $t2<= 0x0000008f
+0x00400018  0x112a002d  beq $9,$10,0x0000002d 23   	beq	$t1,$t2,loop		# Obviamente, esta instrucao nunca deve saltar
+0x0040001c  0x152a0001  bne $9,$10,0x00000001 24   	bne	$t1,$t2,next_i		# Obviamente, esta instrucao sempre deve saltar
+0x00400020  0x254a008f  addiu $10,$10,0x00000025   	addiu	$t2,$t2,0x8f	# Obviamente, esta instrucaotruo nunca deve executar
+0x00400024  0x01095821  addu $11,$8,$9        26   next_i:addu $t3,$t0,$t1	# $t3<= 0x00f30023 + 0x005200e2 = 0x01450105
+0x00400028  0x01096023  subu $12,$8,$9        27   	subu	$t4,$t0,$t1		# $t4<= 0x00f30023 - 0x005200e2 = 0x00a0ff41
+0x0040002c  0x01296823  subu $13,$9,$9        28   	subu	$t5,$t1,$t1		# $t5<= 0x0
+0x00400030  0x01097024  and $14,$8,$9         29   	and	$t6,$t0,$t1			# $t6<= 0x00f30023 and 0x005200e2 = 0x00520022
+0x00400034  0x01097825  or $15,$8,$9          30   	or	$t7,$t0,$t1			# $t7<= 0x00f30023 or  0x005200e2 = 0x00f300e3
+0x00400038  0x0109c026  xor $24,$8,$9         31   	xor	$t8,$t0,$t1			# $t8<= 0x00f30023 xor 0x005200e2 = 0x00a100c1
+0x0040003c  0x0109c827  nor $25,$8,$9         32   	nor	$t9,$t0,$t1			# $t9<= 0x00f30023 nor 0x005200e2 = 0xff0cff1c
+0x00400040  0x01090019  multu $8,$9           33   	multu	$t0,$t1			# Hi & Lo <= 0x00f30023 * 0x005200e2 = 0x00004dd6e1bc1ee6
+0x00400044  0x00008010  mfhi $16              34   	mfhi	$s0				# $s0<= 0x00004dd6
+0x00400048  0x00008812  mflo $17              35   	mflo	$s1				# $s1<= 0xe1bc1ee6
+0x0040004c  0x0109001b  divu $8,$9            36   	divu	$t0,$t1			# Hi,Lo<= 0x00f30023 (mod), 0x005200e2 (/) = 0x4efe5f,0x00000002
+0x00400050  0x250800ab  addiu $8,$8,0x000000ab37   	addiu	$t0,$t0,0x00ab	# $t0<= 0x00f30023  +  0x000000ab = 0x00f300ce
+0x00400054  0x310800ab  andi $8,$8,0x000000ab 38   	andi	$t0,$t0,0x00ab	# $t0<= 0x00f300ce and 0x000000ab = 0x0000008a
+0x00400058  0x3908ffab  xori $8,$8,0x0000ffab 39   	xori	$t0,$t0,0xffab	# $t0<= 0x0000008a xor 0x0000ffab = 0x0000ff21
+0x0040005c  0x00084100  sll $8,$8,0x00000004  40   	sll		$t0,$t0,4		# $t0<= 0x000ff210 (deslocado 4 bits para a esquerda)
+0x00400060  0x00084242  srl $8,$8,0x00000009  41   	srl		$t0,$t0,9		# $t0<= 0x000007f9 (deslocado 9 bits para a direita)
+0x00400064  0x24120008  addiu $18,$0,0x000000042   	addiu	$s2,$zero,8		# $s2<= 0x00000008
+0x00400068  0x02484004  sllv $8,$8,$18        43   	sllv	$t0,$t0,$s2		# $t0<= 0x0007f900 - desloca $t0 8 bits a esquerda, inserindo 0s
+0x0040006c  0x02484004  sllv $8,$8,$18        44   	sllv	$t0,$t0,$s2		# $t0<= 0x07f90000 - desloca $t0 8 bits a esquerda, inserindo 0s
+0x00400070  0x02484004  sllv $8,$8,$18        45   	sllv	$t0,$t0,$s2		# $t0<= 0xf9000000 - desloca $t0 8 bits a esquerda, inserindo 0s
+0x00400074  0x00084103  sra $8,$8,0x00000004  46   	sra		$t0,$t0,4		# $t0<= 0xff900000 - desloca $t0 4 bits a direita mantendo o sinal
+0x00400078  0x02484007  srav $8,$8,$18        47   	srav	$t0,$t0,$s2		# $t0<= 0xffff9000 - desloca $t0 8 bits a direita mantendo o sinal
+0x0040007c  0x02484006  srlv $8,$8,$18        48   	srlv	$t0,$t0,$s2		# $t0<= 0x00ffff90 - desloca $t0 8 bits a direita, inserindo 0s
+0x00400080  0x3c011001  lui $1,0x00001001     49   	la		$t0,array		# coloca em $t0 o endereco inicial do vetor array (0x10010000)
+0x00400084  0x34280000  ori $8,$1,0x00000000       
+0x00400088  0x91090006  lbu $9,0x00000006($8) 50   	lbu		$t1,6($t0)		# $t1<= 0x000000ef (terceiro byte a partir da direita do segundo elemento)
+0x0040008c  0x392900ff  xori $9,$9,0x000000ff 51   	xori	$t1,$t1,0xff	# $t1<= 0x00000010, byte lido (0xef) invertido
+0x00400090  0xa1090006  sb $9,0x00000006($8)  52   	sb		$t1,6($t0)		# terceiro byte do segundo elemento do vetor <= 10 (resto nao muda)
+0x00400094  0x24080001  addiu $8,$0,0x0000000154   	addiu	$t0,$zero,0x1	# $t0<= 0x00000001
+0x00400098  0x00084023  subu $8,$0,$8         55   	subu	$t0,$zero,$t0	# $t0<= 0xffffffff
+0x0040009c  0x0501000c  bgez $8,0x0000000c    56   	bgez	$t0,loop		# Esta instrucao nunca deve saltar, pois $t0 = -1
+0x004000a0  0x0109582a  slt $11,$8,$9         57   	slt	$t3,$t0,$t1			# $t3<= 0x00000001, pois -1 < 10
+0x004000a4  0x0109582b  sltu $11,$8,$9        58   	sltu	$t3,$t0,$t1		# $t3<= 0x00000000, pois (2^32)-1 > 10
+0x004000a8  0x290b0001  slti $11,$8,0x0000000159   	slti	$t3,$t0,0x1		# $t3<= 0x00000001, pois -1 < 1
+0x004000ac  0x2d0b0001  sltiu $11,$8,0x000000060   	sltiu	$t3,$t0,0x1		# $t3<= 0x00000000, pois (2^32)-1 > 1
+0x004000b0  0x3c011001  lui $1,0x00001001     64   soma_ct:la	$t0,array	# coloca em $t0 o endereo do vetor (0x10010000)
+0x004000b4  0x34280000  ori$8,$1,0x00000000       
+0x004000b8  0x3c011001  lui $1,0x00001001     65   	la	$t1,size			# coloca em $t1 o endereo do tamanho do vetor 
+0x004000bc  0x34290020  ori $9,$1,0x00000020       
+0x004000c0  0x8d290000  lw $9,0x00000000($9)  66   	lw	$t1,0($t1)			# coloca em $t1 o tamanho do vetor
+0x004000c4  0x3c011001  lui $1,0x00001001     67   	la	$t2,const			# coloca em $t2 o endereo da constante
+0x004000c8  0x342a0024  ori $10,$1,0x00000024      
+0x004000cc  0x8d4a0000  lw $10,0x00000000($10)68   	lw	$t2,0($t2)			# coloca em $t2 a constante
+0x004000d0  0x19200006  blez $9,0x00000006    69   loop:blez $t1,end_add	# se/quando tamanho torna-se 0, fim do processamento
+0x004000d4  0x8d0b0000  lw $11,0x00000000($8) 70   	lw	$t3,0($t0)			# coloca em $t3 o proximo elemento do vetor
+0x004000d8  0x016a5821  addu $11,$11,$10      71   	addu	$t3,$t3,$t2		# soma constante
+0x004000dc  0xad0b0000  sw $11,0x00000000($8) 72   	sw	$t3,0($t0)			# atualiza no vetor o valor do elemento
+0x004000e0  0x25080004  addiu $8,$8,0x0000000473   	addiu	$t0,$t0,4		# atualiza ponteiro do vetor. Lembrar, 1 palavra=4 posicoes de memoria
+0x004000e4  0x2529ffff  addiu $9,$9,0xffffffff74   	addiu	$t1,$t1,-1		# decrementa contador de tamanho do vetor
+0x004000e8  0x08100034  j 0x004000d0          75   	j	loop				# continua execucao
+0x004000ec  0x3c011001  lui $1,0x00001001     79  end_add:li $sp,0x10010800	# Para poder simular o hardware, inicializa-se o $sp c/valor adequado
+0x004000f0  0x343d0800  ori $29,$1,0x00000800      
+0x004000f4  0x27bdfffc  addiu $29,$29,0xffffff80   	addiu	$sp,$sp,-4		# assume-se $sp inicializado, aloca espaco na pilha
+0x004000f8  0xafbf0000  sw $31,0x00000000($29)82   	sw	$ra,0($sp)			# salva endereco de retorno de quem chamou (trap handler)
+0x004000fc  0x0c100043  jal 0x0040010c        83   	jal	sum_tst				# salta para subrotina sum_tst
+0x00400100  0x8fbf0000  lw $31,0x00000000($29)84   	lw	$ra,0($sp)			# ao retornar, recupera endereco de retorno da pilha
+0x00400104  0x27bd0004  addiu $29,$29,0x00000085   	addiu	$sp,$sp,4		# atualiza apontador de pilha
+0x00400108  0x03e00008  jr $31                86   end:	jr	$ra				# FIM DO PROGRAMA AQUI. volta para o "sistema operacional" 
+0x0040010c  0x3c011001  lui $1,0x00001001     88   sum_tst:la	$t0,var_a	# pega endereco da primeira variavel (pseudo-instrucao)
+0x00400110  0x34280028  ori $8,$1,0x00000028       
+0x00400114  0x8d080000  lw $8,0x00000000($8)  89   	lw	$t0,0($t0)			# toma o valor de var_a e coloca em $t0
+0x00400118  0x3c011001  lui $1,0x00001001     90   	la	$t1,var_b			# pega endereco da segunda variavel (pseudo-instrucao)
+0x0040011c  0x3429002c  ori $9,$1,0x0000002c       
+0x00400120  0x8d290000  lw $9,0x00000000($9)  91   	lw	$t1,0($t1)			# toma o valor de var_b e coloca em $t1
+0x00400124  0x01285021  addu $10,$9,$8        92   	addu	$t2,$t1,$t0		# soma var_a com var_b e coloca resultado em $t2
+0x00400128  0x27bdfff8  addiu $29,$29,0xffffff93   	addiu	$sp,$sp,-8		# aloca espaco na pilha
+0x0040012c  0xafaa0000  sw $10,0x00000000($29)94   	sw	$t2,0($sp)			# no topo da pilha coloca o resultado da soma
+0x00400130  0xafbf0004  sw $31,0x00000004($29)95   	sw	$ra,4($sp)			# abaixo do topo coloca o endereco de retorno
+0x00400134  0x3c010040  lui $1,0x00000040     96   	la	$t3,ver_ev			# pega endereco da subrotina ver_ev (pseudo-instrucao)
+0x00400138  0x342b014c  ori $11,$1,0x0000014c      
+0x0040013c  0x0160f809  jalr $31,$11          97   	jalr	$ra,$t3			# chama subrotina que verifica se resultado da soma e par
+0x00400140  0x8fbf0004  lw $31,0x00000004($29)98   	lw	$ra,4($sp)			# ao retornar, recupera endereco de retorno da pilha
+0x00400144  0x27bd0008  addiu $29,$29,0x00000099   	addiu	$sp,$sp,8		# atualiza apontador de pilha
+0x00400148  0x03e00008  jr $31                100  	jr	$ra					# Rotina acaba AQUI. Retorna para quem chamou
+0x0040014c  0x8fab0000  lw $11,0x00000000($29)102  ver_ev:	lw	$t3,0($sp)	# tira dados to topo da pilha (parametro)
+0x00400150  0x316b0001  andi $11,$11,0x0000000103  	andi	$t3,$t3,1		# $t3 <= 1 se parametro  impar, 0 caso contrario
+0x00400154  0x03e00008  jr $31                104  	jr	$ra					# e retorna
+
+Data Segment
+0x10010000    0xabcdef03 0xcdefab18 0xefabcd35 0xbadcfeab 0xdcfebacd 0xfebadc77 0xdefabc53 0xcbafed45 
+0x10010020    0x00000008 0xffffffff 0x000000ff 0x00000100 0x00000000 0x00000000 0x00000000 0x00000000 
