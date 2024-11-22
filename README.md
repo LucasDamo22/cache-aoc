@@ -1,3 +1,3 @@
 # cache-aoc
-cd srcs
-vsim -do sim.do
+- cd srcs
+- vsim -do sim.do
