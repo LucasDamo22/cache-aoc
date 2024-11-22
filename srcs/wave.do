@@ -16,8 +16,11 @@ add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/oe_n
 add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/bw
 add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/address
 add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/data
+add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/tmp_address
+add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/low_address
+add wave -noupdate -expand -group data_mem -expand /cpu_tb/Data_mem/RAM
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {5242 ns} 0}
+WaveRestoreCursors {{Cursor 1} {5350 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 134
@@ -33,4 +36,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {5178 ns} {5414 ns}
+WaveRestoreZoom {5078 ns} {6047 ns}

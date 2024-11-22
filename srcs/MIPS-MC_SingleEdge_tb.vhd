@@ -2,45 +2,45 @@
 --
 --  TESTBENCH DO PROCESSADOR MIPS_S (LITTLE ENDIAN) 13/10/2004
 --
--- Observe-se que o processador começa sendo ressetado por este testbench
--- (rstCPU <= '1') no início da simulação, sendo ativado  -- (rstCPU <= '0')
--- somente depois do fim da leitura do arquiv contendo o código objeto do
+-- Observe-se que o processador comeï¿½a sendo ressetado por este testbench
+-- (rstCPU <= '1') no inï¿½cio da simulaï¿½ï¿½o, sendo ativado  -- (rstCPU <= '0')
+-- somente depois do fim da leitura do arquiv contendo o cï¿½digo objeto do
 -- programa e executar, bem como seus dados iniciais.
 --
--- Este testbench emprega duas memórias, implicando uma organização HARVARD
+-- Este testbench emprega duas memï¿½rias, implicando uma organizaï¿½ï¿½o HARVARD
 -- para o processador
 --
--- Mudanças:
+-- Mudanï¿½as:
 --	16/05/2012 (Ney Calazans)
---		- Bug corrigido no processo de preenchimento da memória durante o reset.
---		Anteriormente, o processo fazia o processador produzir habilitações no 
---      sinal ce para a memória o que acabava preenchendo a memória de dados 
---      com lixo ao mesmo tempo. Para resolver isto, a geração do sinal de 
---      controle Dce da memória de dados foi mudada de 
+--		- Bug corrigido no processo de preenchimento da memï¿½ria durante o reset.
+--		Anteriormente, o processo fazia o processador produzir habilitaï¿½ï¿½es no 
+--      sinal ce para a memï¿½ria o que acabava preenchendo a memï¿½ria de dados 
+--      com lixo ao mesmo tempo. Para resolver isto, a geraï¿½ï¿½o do sinal de 
+--      controle Dce da memï¿½ria de dados foi mudada de 
 --			--	ce='1' or go_d='1'	 
 --          para 
 --			-- (ce='1' and rstCPU/='1') or go_d='1'
---		- Além disto, havia um problema com a operação de escrita da memória de 
---      dados nas implementações monociclo do MIPS: quando múltiplas instruções
---      SW eram programadas uma após  outra, a escrita ocorria  em dois conjuntos
---		de posições da memória ao mesmo tempo após o primeiro SW da série.
+--		- Alï¿½m disto, havia um problema com a operaï¿½ï¿½o de escrita da memï¿½ria de 
+--      dados nas implementaï¿½ï¿½es monociclo do MIPS: quando mï¿½ltiplas instruï¿½ï¿½es
+--      SW eram programadas uma apï¿½s  outra, a escrita ocorria  em dois conjuntos
+--		de posiï¿½ï¿½es da memï¿½ria ao mesmo tempo apï¿½s o primeiro SW da sï¿½rie.
 --      Para resolver isto o sinal data foi removido da lista de sensitividade 
---      do processo de escrita na memória.
+--      do processo de escrita na memï¿½ria.
 --	10/10/2015 (Ney Calazans)
---		- Sinal bw da memória setado para '1', uma vez que a CPU
---		não gera mais ele.
+--		- Sinal bw da memï¿½ria setado para '1', uma vez que a CPU
+--		nï¿½o gera mais ele.
 --	28/10/2016 (Ney Calazans)
---		- Definições regX mudadas para wiresX, para melhora a readabilidade do
---         código.
+--		- Definiï¿½ï¿½es regX mudadas para wiresX, para melhora a readabilidade do
+--         cï¿½digo.
 --	02/06/2017 (Ney Calazans) - conserto de bugs
---		- tmp_address mudado para int_address na definição da memória
---		- na definição dos processo de escrita/leitura da memória
+--		- tmp_address mudado para int_address na definiï¿½ï¿½o da memï¿½ria
+--		- na definiï¿½ï¿½o dos processo de escrita/leitura da memï¿½ria
 --		  CONV_INTEGER(low_address+3)<=MEMORY_SIZE 
 --        foi mudado para
 --		  CONV_INTEGER(low_address)<=MEMORY_SIZE-3
--- 		Isto evita um erro que congelava a simulação quando a
---		   ALU continnha um número grande (>65533) na sua saída 
---		   imediatamente antes de uma instrução LW o SW.
+-- 		Isto evita um erro que congelava a simulaï¿½ï¿½o quando a
+--		   ALU continnha um nï¿½mero grande (>65533) na sua saï¿½da 
+--		   imediatamente antes de uma instruï¿½ï¿½o LW o SW.
 -------------------------------------------------------------------------
 
 library IEEE;
@@ -53,7 +53,7 @@ package aux_functions is
 	subtype wires8   is std_logic_vector( 7 downto 0);
 	subtype wires4   is std_logic_vector( 3 downto 0);
 
-   -- definição do tipo 'memory', que será utilizado para as memórias de dados/instruções
+   -- definiï¿½ï¿½o do tipo 'memory', que serï¿½ utilizado para as memï¿½rias de dados/instruï¿½ï¿½es
    constant MEMORY_SIZE : integer := 2048;     
    type memory is array (0 to MEMORY_SIZE) of wires8;
 
@@ -123,8 +123,8 @@ package body aux_functions is
 end aux_functions;     
 
 --------------------------------------------------------------------------
--- Módulo que implementa um modelo comportamental de uma RAM
--- com interface assíncrona (sem clock)
+-- Mï¿½dulo que implementa um modelo comportamental de uma RAM
+-- com interface assï¿½ncrona (sem clock)
 --------------------------------------------------------------------------
 library IEEE;
 use ieee.std_logic_1164.all;
@@ -145,8 +145,8 @@ begin
 
    tmp_address <= address - START_ADDRESS;   --  offset do endereamento  -- 
    
-   -- escrita assíncrona na memória  -- LITTLE ENDIAN -------------------
-   process(ce_n, we_n, low_address) -- Modificação em 16/05/2012 para uso
+   -- escrita assï¿½ncrona na memï¿½ria  -- LITTLE ENDIAN -------------------
+   process(ce_n, we_n, low_address) -- Modificaï¿½ï¿½o em 16/05/2012 para uso
                                     -- processadores monociclo apenas
      begin
        if ce_n='0' and we_n='0' then
@@ -161,7 +161,7 @@ begin
          end if;   
     end process;   
     
-   -- leitura da memória
+   -- leitura da memï¿½ria
    process(ce_n, oe_n, low_address)
      begin
        if ce_n='0' and oe_n='0' and
@@ -200,7 +200,7 @@ architecture cpu_tb of cpu_tb is
     signal Dce_n, Dwe_n, Doe_n, Ice_n, Iwe_n, Ioe_n, ck, rst, rstCPU, hold,
            go_i, go_d, ce, rw, bw: std_logic;
     
-    file ARQ : TEXT open READ_MODE is "Test_Program_Allinst_MIPS_MCS.txt";
+    file ARQ : TEXT open READ_MODE is "/home/lucas.damo/Documents/org-arq/MIPS_MultiCiclo_Hold/apps/add-sw-text.txt";
  
 begin
            
@@ -214,7 +214,7 @@ begin
         
     hold <= '0';
                                    
-    -- sinais para adaptar a memória de dados ao processador ---------------------------------------------
+    -- sinais para adaptar a memï¿½ria de dados ao processador ---------------------------------------------
     Dce_n <= '0' when (ce='1' and rstCPU/='1') or go_d='1' else '1'; -- Bug corrected here in 16/05/2012
     Doe_n <= '0' when (ce='1' and rw='1')             else '1';       
     Dwe_n <= '0' when (ce='1' and rw='0') or go_d='1' else '1';    
@@ -224,9 +224,9 @@ begin
     
     data_cpu <= Ddata when (ce='1' and rw='1') else (others=>'Z');
     
-    -- sinais para adaptar a memória de instruções ao processador ---------------------------------------------
+    -- sinais para adaptar a memï¿½ria de instruï¿½ï¿½es ao processador ---------------------------------------------
     Ice_n <= '0';                                 
-    Ioe_n <= '1' when rstCPU='1' else '0';           -- impede leitura enquanto está escrevendo                             
+    Ioe_n <= '1' when rstCPU='1' else '0';           -- impede leitura enquanto estï¿½ escrevendo                             
     Iwe_n <= '0' when go_i='1'   else '1';           -- escrita durante a leitura do arquivo 
     
     Iadress <= tb_add  when rstCPU='1' else i_cpu_address;
@@ -252,11 +252,11 @@ begin
 
     
     ----------------------------------------------------------------------------
-    -- Este processo carrega a memória de instruções e a memória de dados
-    -- durante o período que o reset fica ativo
+    -- Este processo carrega a memï¿½ria de instruï¿½ï¿½es e a memï¿½ria de dados
+    -- durante o perï¿½odo que o reset fica ativo
     --
     --
-    --   O PROCESSO ABAIXO É UM PARSER PARA LER CÓDIGO GERADO PELO MARS NO
+    --   O PROCESSO ABAIXO ï¿½ UM PARSER PARA LER Cï¿½DIGO GERADO PELO MARS NO
     --   SEGUINTE FORMATO:
     --
     --      Text Segment
@@ -280,22 +280,22 @@ begin
         go_i <= '0';
         go_d <= '0';
         rstCPU <= '1';           -- segura o processador durante a leitura do arquivo
-        code:=true;              -- valor default de code é true (leitura de instruções)
+        code:=true;              -- valor default de code ï¿½ true (leitura de instruï¿½ï¿½es)
                                  
         wait until rst = '1';
         
-        while NOT (endfile(ARQ)) loop    -- INCIO DA LEITURA DO ARQUIVO CONTENDO INSTRUÇÕES E DADOS -----
+        while NOT (endfile(ARQ)) loop    -- INCIO DA LEITURA DO ARQUIVO CONTENDO INSTRUï¿½ï¿½ES E DADOS -----
             readFileLine(ARQ, line_arq);            
             if line_arq(1 to 12)="Text Segment" then 
-                   code:=true;                     -- instruções 
+                   code:=true;                     -- instruï¿½ï¿½es 
             elsif line_arq(1 to 12)="Data Segment" then
                    code:=false;                    -- dados
             else 
-               i := 1;                  -- LEITURA DE LINHA - analisar o laço abaixo para entender 
-               address_flag := 0;       -- para INSTRUÇÕES  um par (end,inst)
+               i := 1;                  -- LEITURA DE LINHA - analisar o laï¿½o abaixo para entender 
+               address_flag := 0;       -- para INSTRUï¿½ï¿½ES  um par (end,inst)
                                         -- para DADOS aceita (end dado 0 dado 1 dado 2 ....)
                loop                                     
-                  if line_arq(i) = '0' and line_arq(i+1) = 'x' then -- encontrou indicaçã de número hexa: '0x'
+                  if line_arq(i) = '0' and line_arq(i+1) = 'x' then -- encontrou indicaï¿½ï¿½ de nï¿½mero hexa: '0x'
                          i := i + 2;
                          if address_flag=0 then
                                for w in 0 to 7 loop
@@ -312,9 +312,9 @@ begin
                                wait for 0.1 ns;
                                
                                if code=true then go_i <= '1';    
-                               -- O sinal go_i habilita escrita na memória de instruções
+                               -- O sinal go_i habilita escrita na memï¿½ria de instruï¿½ï¿½es
                                             else go_d <= '1';    
-                               -- O sinal go_d habilita escrita na memória de dados
+                               -- O sinal go_d habilita escrita na memï¿½ria de dados
                                end if; 
                                
                                wait for 0.1 ns;
@@ -323,23 +323,23 @@ begin
                                go_i <= '0';
                                go_d <= '0'; 
                                
-                               address_flag := 2;    -- sinaliza que já leu o conteúdo do endereço;
+                               address_flag := 2;    -- sinaliza que jï¿½ leu o conteï¿½do do endereï¿½o;
 
                          end if;
                   end if;
                   i := i + 1;
                   
-                  -- sai da linha quando chegou no seu final OU já leu par (endereo, instrução) 
-                  --    no caso de instruções
+                  -- sai da linha quando chegou no seu final OU jï¿½ leu par (endereo, instruï¿½ï¿½o) 
+                  --    no caso de instruï¿½ï¿½es
                   exit when i=TAM_LINHA or (code=true and address_flag=2);
                end loop;
             end if;
             
-        end loop;       -- FINAL DA LEITURA DO ARQUIVO CONTENDO INSTRUÇÕES E DADOS -----
+        end loop;       -- FINAL DA LEITURA DO ARQUIVO CONTENDO INSTRUï¿½ï¿½ES E DADOS -----
         
         rstCPU <= '0' after 2 ns;   -- libera o processador para executar o programa
-        wait for 4 ns;              -- espera um pouco antes de começar a esperar pelo rst de novo
-        wait until rst = '1';       -- Se isto acontecer começa de novo!!
+        wait for 4 ns;              -- espera um pouco antes de comeï¿½ar a esperar pelo rst de novo
+        wait until rst = '1';       -- Se isto acontecer comeï¿½a de novo!!
         
     end process;
     
