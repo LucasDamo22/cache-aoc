@@ -1,42 +1,56 @@
-module ram#(
-    parameter bit HOLD_CYCLES = 0,
+module ram 
+#(
     parameter int MEM_WIDHT = 128,
-    parameter START_ADRESS = 32'h10010000,
-    parameter string BIN_FILE = "../apps/text-data-sections.txt"
+    parameter int START_ADRESS = 32'h10010000,
+    parameter string BIN_FILE = ""
 )
 (
     input logic clk,
+    input logic reset_n,
     input logic[31:0] addr,
-    inout logic[31:0] data
+    inout logic[31:0] data,
     input logic ce_n,
     input logic we_n,
     input logic oe_n,
     input logic bw
 );
+function automatic [31:0] conv_addr;
+        input [31:0]  addr;
+        begin
+            conv_addr = addr - START_ADRESS;  // Subtract the two 32-bit addresses
+        end
+endfunction
 
 logic [31:0] RAM [0:MEM_WIDHT];
 
-/*READ FROM MEM*/
-always_ff @(posedge clk) begin
+logic [31:0]data_out;
+
+
+always_comb begin
     if(!ce_n && !oe_n) begin
-        data <= RAM[addr];
-    end else begin
-        data <= 'Z;
-    end
+        data_out <= RAM[conv_addr(addr)];
+    end 
 end
 
-
 /*WRITE TO MEM*/
-always_ff @(posedge clk) begin
+always_comb begin
+    if(!reset_n) begin
+        for(int i = 0; i < MEM_WIDHT; i ++) begin
+            RAM[i] <= '0;
+        end  
+    end
     if (!ce_n && !we_n) begin
         if(!bw) begin 
             // mask for byte-write
-            RAM[addr] <= data & ~32'hffffff00;
+            RAM[conv_addr(addr)] <= data & ~32'hffffff00;
         end else begin
-            RAM[addr] <= data;
+            RAM[conv_addr(addr)] <= data;
         end
     end
 end 
+
+assign    data = !oe_n ? data_out : 'z;
+
 
 
 

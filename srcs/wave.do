@@ -1,26 +1,18 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
-add wave -noupdate -expand -group cpu /cpu_tb/cpu/clock
-add wave -noupdate -expand -group cpu /cpu_tb/cpu/reset
-add wave -noupdate -expand -group cpu /cpu_tb/cpu/hold
-add wave -noupdate -expand -group cpu /cpu_tb/cpu/ce
-add wave -noupdate -expand -group cpu /cpu_tb/cpu/rw
-add wave -noupdate -expand -group cpu /cpu_tb/cpu/bw
-add wave -noupdate -expand -group cpu /cpu_tb/cpu/i_address
-add wave -noupdate -expand -group cpu /cpu_tb/cpu/instruction
-add wave -noupdate -expand -group cpu /cpu_tb/cpu/d_address
-add wave -noupdate -expand -group cpu /cpu_tb/cpu/data
-add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/ce_n
-add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/we_n
-add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/oe_n
-add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/bw
-add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/address
-add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/data
-add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/tmp_address
-add wave -noupdate -expand -group data_mem /cpu_tb/Data_mem/low_address
-add wave -noupdate -expand -group data_mem -expand /cpu_tb/Data_mem/RAM
+add wave -noupdate -expand -group ram /tbmem/ram/MEM_WIDHT
+add wave -noupdate -expand -group ram /tbmem/ram/START_ADRESS
+add wave -noupdate -expand -group ram /tbmem/ram/clk
+add wave -noupdate -expand -group ram /tbmem/ram/addr
+add wave -noupdate -expand -group ram /tbmem/ram/data
+add wave -noupdate -expand -group ram /tbmem/ram/ce_n
+add wave -noupdate -expand -group ram /tbmem/ram/we_n
+add wave -noupdate -expand -group ram /tbmem/ram/oe_n
+add wave -noupdate -expand -group ram /tbmem/ram/bw
+add wave -noupdate -expand -group ram /tbmem/ram/data_out
+add wave -noupdate -expand -group ram /tbmem/ram/RAM
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {5350 ns} 0}
+WaveRestoreCursors {{Cursor 1} {119 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 134
@@ -36,4 +28,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {5078 ns} {6047 ns}
+WaveRestoreZoom {0 ns} {385 ns}
