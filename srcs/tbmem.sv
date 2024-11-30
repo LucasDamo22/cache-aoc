@@ -15,7 +15,7 @@ always begin
 end
 
 ram #(
- .BIN_FILE("/home/lucas.damo/Documents/org-arq/MIPS_MultiCiclo_Hold/apps/text-hex-text.txt")
+ .BIN_FILE("/home/lucas.damo/Documents/org-arq/MIPS_MultiCiclo_Hold/apps/text.bin")
 ) ram (
     .clk (clk),
     .reset_n(reset_n),

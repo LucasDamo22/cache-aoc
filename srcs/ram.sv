@@ -21,7 +21,7 @@ function automatic [31:0] conv_addr;
         end
 endfunction
 
-logic [31:0] RAM [0:MEM_WIDHT];
+logic [7:0] RAM [0:MEM_WIDHT];
 
 logic [31:0]data_out;
 
@@ -33,19 +33,24 @@ always_comb begin
 end
 
 /*WRITE TO MEM*/
+int fd;
 always_comb begin
     if(!reset_n) begin
-        for(int i = 0; i < MEM_WIDHT; i ++) begin
-            RAM[i] <= '0;
-        end  
+        fd = $fopen (BIN_FILE, "r");
+        if (fd == '0) begin
+            $display("[%d] [RAM_mem] ERROR: %s not found.", $time(), BIN_FILE);
+            $finish();
+        end
+
+        void'($fread(RAM, fd));
     end
     if (!ce_n && !we_n) begin
-        if(!bw) begin 
-            // mask for byte-write
-            RAM[conv_addr(addr)] <= data & ~32'hffffff00;
-        end else begin
-            RAM[conv_addr(addr)] <= data;
-        end
+        if(bw) begin 
+           RAM[conv_addr(addr)+3] <= data[31:24];
+           RAM[conv_addr(addr)+2] <= data[23:16];
+           RAM[conv_addr(addr)+1] <= data[15:8]; 
+        end 
+        RAM[conv_addr(addr)] <= data[7:0];
     end
 end 
 
