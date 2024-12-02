@@ -8,16 +8,16 @@ module ram
     input logic clk,
     input logic reset_n,
     input logic[31:0] addr,
-    inout logic[31:0] data,
+    inout wire logic[31:0] data,
     input logic ce_n,
     input logic we_n,
     input logic oe_n,
     input logic bw
 );
-function automatic [31:0] conv_addr;
+function automatic [15:0] conv_addr;
         input [31:0]  addr;
         begin
-            conv_addr = addr - START_ADRESS;  // Subtract the two 32-bit addresses
+            conv_addr = {'0,(addr - START_ADRESS)};  // Subtract the two 32-bit addresses
         end
 endfunction
 
@@ -26,12 +26,8 @@ logic [7:0] RAM [0:MEM_WIDHT];
 logic [31:0]data_out;
 
 
-always_comb begin
-    if(!ce_n && !oe_n) begin
-        data_out <= RAM[conv_addr(addr)];
-    end 
-end
-
+logic [31:0] addr_view;
+assign addr_view = conv_addr(addr[15:0]);
 /*WRITE TO MEM*/
 int fd;
 always_comb begin
@@ -43,14 +39,21 @@ always_comb begin
         end
 
         void'($fread(RAM, fd));
-    end
-    if (!ce_n && !we_n) begin
+    end else begin
+    if(!ce_n && !oe_n) begin
+        data_out[31:24] = RAM[conv_addr(addr[15:0]) + 3];
+        data_out[23:16] = RAM[conv_addr(addr[15:0]) + 2];
+        data_out[15:8]  = RAM[conv_addr(addr[15:0]) + 1];
+        data_out[7:0]   = RAM[conv_addr(addr[15:0])];
+    end 
+    else if (!ce_n && !we_n) begin
         if(bw) begin 
-           RAM[conv_addr(addr)+3] <= data[31:24];
-           RAM[conv_addr(addr)+2] <= data[23:16];
-           RAM[conv_addr(addr)+1] <= data[15:8]; 
+           RAM[conv_addr(addr[15:0])+3] = data[31:24];
+           RAM[conv_addr(addr[15:0])+2] = data[23:16];
+           RAM[conv_addr(addr[15:0])+1] = data[15:8]; 
         end 
-        RAM[conv_addr(addr)] <= data[7:0];
+        RAM[conv_addr(addr[15:0])] <= data[7:0];
+    end 
     end
 end 
 
