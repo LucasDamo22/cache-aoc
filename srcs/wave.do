@@ -4,6 +4,8 @@ add wave -noupdate -expand -group inst /cpu_tb/inst_ram/MEM_WIDHT
 add wave -noupdate -expand -group inst /cpu_tb/inst_ram/START_ADRESS
 add wave -noupdate -expand -group inst /cpu_tb/inst_ram/clk
 add wave -noupdate -expand -group inst /cpu_tb/inst_ram/reset_n
+add wave -noupdate -expand -group inst /cpu_tb/inst_ram/hold_o
+add wave -noupdate -expand -group inst /cpu_tb/inst_ram/hold_gen/count
 add wave -noupdate -expand -group inst /cpu_tb/inst_ram/addr
 add wave -noupdate -expand -group inst /cpu_tb/inst_ram/data
 add wave -noupdate -expand -group inst /cpu_tb/inst_ram/ce_n
@@ -47,7 +49,7 @@ add wave -noupdate -expand -group cpu /cpu_tb/cpu/salta
 add wave -noupdate -expand -group cpu /cpu_tb/cpu/end_mul
 add wave -noupdate -expand -group cpu /cpu_tb/cpu/end_div
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {13543566 ps} 0}
+WaveRestoreCursors {{Cursor 1} {13352965 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 134
@@ -63,4 +65,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {13352100 ps} {14034100 ps}
+WaveRestoreZoom {13352100 ps} {13423457 ps}
