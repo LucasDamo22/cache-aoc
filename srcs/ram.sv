@@ -23,12 +23,9 @@ function automatic [15:0] conv_addr;
         end
 endfunction
 
-logic [7:0] RAM [0:MEM_WIDHT];
+logic  [7:0] RAM [0:MEM_WIDHT];
+logic [31:0] data_out;
 
-logic [31:0]data_out;
-
-logic [31:0] addr_view;
-assign addr_view = conv_addr(addr[15:0]);
 int fd;
 always_comb begin
     if(!reset_n) begin
@@ -77,8 +74,9 @@ end else begin
     assign hold_o = 0;
 end
 
-assign    data = !oe_n ? data_out : 'z;
-
+logic [31:0] addr_view;
+assign addr_view = conv_addr(addr[15:0]);
+assign data = !oe_n ? data_out : 'z;
 
 
 
