@@ -8,6 +8,8 @@ always  begin
     #5 clk = 1;
 end
 initial begin
+    reset_n = 1;
+    #10
     reset_n = 0;
     #37
     reset_n = 1;    
@@ -61,6 +63,11 @@ ram #(
     .hold_o (hold),
     .bw     (i_bw)
 );
+/*
+cache #(parametro)(
+    entradaas
+);
+*/
 ram #(
     .MEM_WIDHT(128),
     .BIN_FILE("/home/lucas.damo/Documents/org-arq/MIPS_MultiCiclo_Hold/apps/data.bin")

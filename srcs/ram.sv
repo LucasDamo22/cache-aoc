@@ -43,7 +43,7 @@ always_comb begin
         data_out[7:0]   = RAM[conv_addr(addr[15:0])];
     end 
     else if (!ce_n && !we_n) begin
-        if(bw) begin 
+        if(bw) begin // bw = 1 escrevendo uma word, bw = 0 escrevendo byte
            RAM[conv_addr(addr[15:0])+3] = data[31:24];
            RAM[conv_addr(addr[15:0])+2] = data[23:16];
            RAM[conv_addr(addr[15:0])+1] = data[15:8]; 
@@ -77,7 +77,5 @@ end
 logic [31:0] addr_view;
 assign addr_view = conv_addr(addr[15:0]);
 assign data = !oe_n ? data_out : 'z;
-
-
 
 endmodule
