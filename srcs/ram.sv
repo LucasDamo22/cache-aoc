@@ -48,7 +48,7 @@ always_comb begin
            RAM[conv_addr(addr[15:0])+2] = data[23:16];
            RAM[conv_addr(addr[15:0])+1] = data[15:8]; 
         end 
-        RAM[conv_addr(addr[15:0])] <= data[7:0];
+        RAM[conv_addr(addr[15:0])] = data[7:0];
     end 
     end
 end 

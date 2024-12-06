@@ -2,17 +2,23 @@
 module cpu_tb;
 logic clk = 1;
 logic reset_n;
+logic reset;
 
 always  begin
     #5 clk = 0;
     #5 clk = 1;
 end
+
 initial begin
-    reset_n = 1;
-    #10
     reset_n = 0;
-    #37
-    reset_n = 1;    
+    #10
+    reset_n = 1;  
+end
+
+initial begin
+    reset = 1;
+    #10
+    reset = 0;
 end
 
 logic i_ce_n;
@@ -36,6 +42,7 @@ wire logic [31:0]data;
 logic rw;
 logic ce;
 
+logic mult_read;
 logic hold;
 
 assign d_ce_n = !ce;
@@ -46,13 +53,14 @@ assign i_ce_n = 0;
 assign i_oe_n = !reset_n ? 1 : 0;
 assign i_we_n = 1;
 assign i_bw   = 1;
+assign mult_read = 1;
 
-ram #(
-    .HOLD_CYLES(16),
+cache #(
+    .HOLD_CYLES(0),
     .START_ADRESS(32'h00400000),
     .MEM_WIDHT(128),
-    .BIN_FILE("/home/lucas.damo/Documents/org-arq/MIPS_MultiCiclo_Hold/apps/text.bin")
-) inst_ram (
+    .BIN_FILE("../apps/text.bin")
+) cache_l1 (
     .clk    (clk),
     .reset_n(reset_n),
     .addr   (i_addr),
@@ -63,15 +71,11 @@ ram #(
     .hold_o (hold),
     .bw     (i_bw)
 );
-/*
-cache #(parametro)(
-    entradaas
-);
-*/
-ram #(
+
+mp #(
     .MEM_WIDHT(128),
-    .BIN_FILE("/home/lucas.damo/Documents/org-arq/MIPS_MultiCiclo_Hold/apps/data.bin")
-) data_ram (
+    .BIN_FILE("../apps/data.bin")
+) main_memory_data (
     .clk    (clk),
     .reset_n(reset_n),
     .addr   (d_addr),
@@ -79,13 +83,16 @@ ram #(
     .ce_n   (d_ce_n),
     .we_n   (d_we_n),
     .oe_n   (d_oe_n),
+    .multiple_read (mult_read),
+    .cache_data(),
     .hold_o (),
+    .cache_read_full(),
     .bw     (d_bw)
 );
 
 MIPS_S cpu (
     .clock(clk),
-    .reset(!reset_n),
+    .reset(reset),
     .ce(ce),
     .bw(d_bw),
     .rw(rw),

@@ -20,7 +20,7 @@ always begin
 end
 
 ram #(
- .BIN_FILE("/home/lucas.damo/Documents/org-arq/MIPS_MultiCiclo_Hold/apps/text.bin")
+ .BIN_FILE("../apps/text.bin")
 ) ram (
     .clk (clk),
     .reset_n(reset_n),
@@ -58,8 +58,6 @@ initial begin
     ce_n = 1;
     we_n = 1;
     data_w = 'z;
-    
-
 end
 
 endmodule
