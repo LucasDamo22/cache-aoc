@@ -1,7 +1,7 @@
 module cache 
 #(
-    parameter int HOLD_CYLES = 0,
-    parameter int MEM_WIDHT = 128,
+    parameter int HOLD_CYLES_MISS = 0,
+    parameter int MP_WIDHT = 128,
     parameter int START_ADRESS = 32'h00400000,
     parameter string BIN_FILE = ""
 )
@@ -57,16 +57,16 @@ logic PE;
 //////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////
+
 mp #(
-    .HOLD_CYLES(15),
-    .START_ADRESS(32'h00400000),
-    .MEM_WIDHT(128),
+    .HOLD_CYLES_MISS(HOLD_CYLES_MISS),
+    .START_ADRESS(START_ADRESS),
+    .MEM_WIDHT(MP_WIDHT),
     .BIN_FILE(BIN_FILE)
 ) main_memory_inst (
     .clk           (clk),
     .reset_n       (reset_n),
     .addr          ({addr[31:5], 5'b0}),
-    .data          (),
     .ce_n          (ce_n),
     .we_n          (we_n_fake),
     .oe_n          (oe_n_read),
@@ -76,6 +76,7 @@ mp #(
     .hold_o        (hold_wire),
     .bw            (bw)
 );
+
 //////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////

@@ -22,14 +22,17 @@ function automatic [15:0] conv_addr;
             conv_addr = {'0,(addr - START_ADRESS)};  // Subtract the two 32-bit addresses
         end
 endfunction
+initial begin
 
-logic  [7:0] RAM [0:MEM_WIDHT];
+end
+
+logic  [7:0] RAM [0:MEM_WIDHT] = '{default :'0};
 logic [31:0] data_out;
 
 int fd;
 always_comb begin
     if(!reset_n) begin
-        fd = $fopen (BIN_FILE, "r");
+        fd = $fopen (BIN_FILE, "r"); 
         if (fd == '0) begin
             $display("[%d] [RAM_mem] ERROR: %s not found.", $time(), BIN_FILE);
             $finish();

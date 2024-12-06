@@ -1,6 +1,6 @@
 module mp 
 #(
-    parameter int HOLD_CYLES = 0,
+    parameter int HOLD_CYLES_MISS = 0,
     parameter int MEM_WIDHT = 128,
     parameter int START_ADRESS = 32'h10010000,
     parameter int CACHE_WIDTH = 256,
@@ -27,7 +27,7 @@ function automatic [15:0] conv_addr;
         end
 endfunction
 
-logic  [7:0] RAM [0:MEM_WIDHT];
+logic  [7:0] RAM [0:MEM_WIDHT]= '{default :'0};
 logic [31:0] data_out;
 logic [31:0] cache_data_out [0:7];
 logic [31:0] cache_data_out_real [0:7];
@@ -86,7 +86,7 @@ end
                     hold_o <= 0;
                 end
                 count <= count - 1;
-                count_cache <= HOLD_CYLES;
+                count_cache <= HOLD_CYLES_MISS;
             end
             else if(!ce_n && !oe_n && !multiple_read) begin
                 if(count_cache > 0) begin
@@ -99,7 +99,7 @@ end
                 count_cache <= count_cache - 1;
             end
             else begin
-                count_cache <= HOLD_CYLES;
+                count_cache <= HOLD_CYLES_MISS;
             end
         end
     end

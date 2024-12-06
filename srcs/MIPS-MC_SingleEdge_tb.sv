@@ -54,12 +54,13 @@ assign i_oe_n = !reset_n ? 1 : 0;
 assign i_we_n = 1;
 assign i_bw   = 1;
 assign mult_read = 1;
+localparam MEM_WIDHT = 8192;
 
 cache #(
-    .HOLD_CYLES(0),
+    .HOLD_CYLES_MISS(0),
     .START_ADRESS(32'h00400000),
-    .MEM_WIDHT(128),
-    .BIN_FILE("../apps/text.bin")
+    .MP_WIDHT(MEM_WIDHT),
+    .BIN_FILE("../apps/test-all-inst-text.bin")
 ) cache_l1 (
     .clk    (clk),
     .reset_n(reset_n),
@@ -72,10 +73,10 @@ cache #(
     .bw     (i_bw)
 );
 
-mp #(
-    .MEM_WIDHT(128),
-    .BIN_FILE("../apps/data.bin")
-) main_memory_data (
+ram #(
+    .MEM_WIDHT(MEM_WIDHT),
+    .BIN_FILE("../apps/test-all-inst-data.bin")
+) data_ram (
     .clk    (clk),
     .reset_n(reset_n),
     .addr   (d_addr),
@@ -83,10 +84,7 @@ mp #(
     .ce_n   (d_ce_n),
     .we_n   (d_we_n),
     .oe_n   (d_oe_n),
-    .multiple_read (mult_read),
-    .cache_data(),
     .hold_o (),
-    .cache_read_full(),
     .bw     (d_bw)
 );
 
