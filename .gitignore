@@ -1,4 +1,5 @@
 *.wlf
 transcript
 *.ini
+srcs/.nfs*
 srcs/work/

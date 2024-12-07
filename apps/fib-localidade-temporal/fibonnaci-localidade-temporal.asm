@@ -1,14 +1,51 @@
-.text			# Declaracao de inicio do segmento de texto
-	.globl	main		# Declaracao de que o rotulo main e global
-
-main:				
+.text
+.globl main
+main:
+	li	$a0, 7
 	la   $s2, array #carrega oprimeiro endereço da mem data
 	lw   $s3, cafe  # carrega a polavra que vai encher memoria
+	jal	fib
+	move 	$a0, $v0
+	sw      $a0,result
 	
+fim: j fim
+	
+	
+fib:	
+	j loop
+retloop:subiu	$sp, $sp, 12
+	sw	$ra, 0($sp)
+	sw	$s0, 4($sp)
+	sw	$s1, 8($sp)
+	
+	addiu	$s0, $a0, 0
+	beq	$0, $s0, done
+	addiu	$t0, $0, 1
+	beq	$t0, $s0, done
+	
+	addiu	$a0, $s0, -1
+	jal	fib
+	addiu	$s1, $v0, 0
+	subiu	$a0, $s0, 2
+	jal	fib
+	addu	$v0, $v0, $s1
+	j	finish
+	
+done:	
+        addu	$v0, $0, $s0
+	j	finish
+	
+finish: 
+        lw	$s1, 8($sp)
+	lw	$s0, 4($sp)
+	lw	$ra, 0($sp)
+	addiu	$sp, $sp, 12
+	jr	$ra
+############################
 loop:	
 	lw   $s4, contador #carrega um contador
 	addiu $s4, $s4, 1  #soma 1 no contador
- 	bge   $s4, 40, fim
+ 	bge   $s4, 20, retloop
 	sw    $s4, contador		
 	#cache 1
 jump1:	addu  $t7, $zero, $zero
@@ -201,9 +238,10 @@ last:	addiu $s2, $s2, 4 #soma 4 no endereço mem
 	addu $s1, $zero, $s3 #carrega bebacafe no s1
 	sw   $s1, 0($s2) #salva o s1 na mem
 	j loop
-fim:
-	j fim
+	
 .data
+
+result: .word 0x0
 contador: .word 0
 cafe: .word 0xBEBACAFE
 array: .word 0xffffffff

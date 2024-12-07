@@ -46,13 +46,13 @@ assign i_we_n = 1;
 assign i_bw   = 1;
 
 localparam MEM_WIDHT_INST = 8192;
-localparam MEM_WIDHT_DATA = 2_147_483_647;
+localparam MEM_WIDHT_DATA = 65536;
 
 ram #(
     .HOLD_CYLES(16),
     .START_ADRESS(32'h00400000),
     .MEM_WIDHT(MEM_WIDHT_INST),
-    .BIN_FILE("/home/lucas.damo/Documents/org-arq/cache-aoc/apps/fibonnaci-recurs/fib-recurs-text.bin")
+    .BIN_FILE("../apps/fib-localidade-temporal/fibonnaci-localidade-temporal-text.bin")
 ) inst_ram (
     .clk    (clk),
     .reset_n(reset_n),
@@ -66,7 +66,7 @@ ram #(
 );
 ram #(
     .MEM_WIDHT(MEM_WIDHT_DATA),
-    .BIN_FILE("/home/lucas.damo/Documents/org-arq/cache-aoc/apps/fibonnaci-recurs/fib-recurs-data.bin")
+    .BIN_FILE("../apps/fib-localidade-temporal/fibonnaci-localidade-temporal-text.bin")
 ) data_ram (
     .clk    (clk),
     .reset_n(reset_n),

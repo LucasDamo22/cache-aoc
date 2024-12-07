@@ -46,18 +46,13 @@ assign i_we_n = 1;
 assign i_bw   = 1;
 
 localparam MEM_WIDHT_INST = 8192;
-localparam MEM_WIDHT_DATA = 2_147_483_647;
+localparam MEM_WIDHT_DATA = 65536;
 
-
-
-
-
-//localparam MEM_WIDHT_DATA = 10;
 
 ram #(
     .START_ADRESS(32'h00400000),
     .MEM_WIDHT(MEM_WIDHT_INST),
-    .BIN_FILE("../apps/localidade-espacial-high-miss/bebacafe-localidade-espacial-highmiss-text.bin")
+    .BIN_FILE("../apps/bubblesort/fibonnaci-localidade-temporal-text.bin")
 ) inst_ram (
     .clk    (clk),
     .reset_n(reset_n),
@@ -71,7 +66,7 @@ ram #(
 );
 ram #(
     .MEM_WIDHT(MEM_WIDHT_DATA),
-    .BIN_FILE("../apps/localidade-espacial-high-miss/bebacafe-localidade-espacial-highmiss-data.bin")
+    .BIN_FILE("../apps/bubblesort/fibonnaci-localidade-temporal-data.bin")
 ) data_ram (
     .clk    (clk),
     .reset_n(reset_n),

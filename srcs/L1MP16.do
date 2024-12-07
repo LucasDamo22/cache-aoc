@@ -9,5 +9,5 @@ vlog -mixedsvvh -work work rtl/cache.sv
 vlog -mixedsvvh -work work rtl/MIPS-L1-MP16-tb.sv
 
 vsim -voptargs=+acc work.cpu_tb
-do wave.do
+do waveL1.do
 run 14us

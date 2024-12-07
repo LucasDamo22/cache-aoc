@@ -74,7 +74,7 @@ end
 
     always_ff @(posedge clk or negedge reset_n) begin
         if(!reset_n) begin
-            count <=       4'hF;
+            count <=       HOLD_CYLES_MISS;
             count_cache <= 4'hF;
             hold_o <= 1;
             cache_read_full <= 1;
