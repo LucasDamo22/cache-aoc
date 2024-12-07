@@ -2,23 +2,15 @@
 module cpu_tb;
 logic clk = 1;
 logic reset_n;
-logic reset;
 
 always  begin
     #5 clk = 0;
     #5 clk = 1;
 end
-
 initial begin
     reset_n = 0;
-    #10
-    reset_n = 1;  
-end
-
-initial begin
-    reset = 1;
-    #10
-    reset = 0;
+    #37
+    reset_n = 1;    
 end
 
 logic i_ce_n;
@@ -42,7 +34,6 @@ wire logic [31:0]data;
 logic rw;
 logic ce;
 
-logic mult_read;
 logic hold;
 
 assign d_ce_n = !ce;
@@ -53,15 +44,16 @@ assign i_ce_n = 0;
 assign i_oe_n = !reset_n ? 1 : 0;
 assign i_we_n = 1;
 assign i_bw   = 1;
-assign mult_read = 1;
-localparam MEM_WIDHT = 8192;
 
-cache #(
-    .HOLD_CYLES_MISS(0),
+localparam MEM_WIDHT_INST = 8192;
+localparam MEM_WIDHT_DATA = 2_147_483_647;
+
+ram #(
+    .HOLD_CYLES(16),
     .START_ADRESS(32'h00400000),
-    .MP_WIDHT(MEM_WIDHT),
-    .BIN_FILE("../apps/test-all-inst-text.bin")
-) cache_l1 (
+    .MEM_WIDHT(MEM_WIDHT_INST),
+    .BIN_FILE("/home/lucas.damo/Documents/org-arq/cache-aoc/apps/fibonnaci-recurs/fib-recurs-text.bin")
+) inst_ram (
     .clk    (clk),
     .reset_n(reset_n),
     .addr   (i_addr),
@@ -72,10 +64,9 @@ cache #(
     .hold_o (hold),
     .bw     (i_bw)
 );
-
 ram #(
-    .MEM_WIDHT(MEM_WIDHT),
-    .BIN_FILE("../apps/test-all-inst-data.bin")
+    .MEM_WIDHT(MEM_WIDHT_DATA),
+    .BIN_FILE("/home/lucas.damo/Documents/org-arq/cache-aoc/apps/fibonnaci-recurs/fib-recurs-data.bin")
 ) data_ram (
     .clk    (clk),
     .reset_n(reset_n),
@@ -90,7 +81,7 @@ ram #(
 
 MIPS_S cpu (
     .clock(clk),
-    .reset(reset),
+    .reset(!reset_n),
     .ce(ce),
     .bw(d_bw),
     .rw(rw),
